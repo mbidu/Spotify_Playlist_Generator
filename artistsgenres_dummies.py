@@ -2,36 +2,37 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import cm
 import pandas as pd
+import re
 
-def plot_pie(x,labels):
+def plot_pie(x,y):
     # with plt.style.context('dark_background'):
     colors = cm.turbo(np.arange(len(x))/(len(x)))
 
     # plot
     fig, ax = plt.subplots()
     ax.axis(False)
-    ax.pie(x,labels = labels, autopct='%1.0f%%',radius=3, center=(4, 4),textprops={'color':"black"},colors=colors,
-            wedgeprops={"linewidth": 1, "edgecolor": "black"}, frame=True)
+    ax.pie(x,labels = y, autopct='%0.1f%%',textprops={'color':"black"},colors=colors,
+            wedgeprops={"linewidth": 1, "edgecolor": "black"}, frame=True, startangle=90, pctdistance = 0.85)
 
-    ax.set(xlim=(0, 1), xticks=np.arange(1, 8),
-            ylim=(0, 1), yticks=np.arange(1, 8))
-
+    plt.tight_layout()
     plt.show()
 
-def plot_bar(labels,y):
-    import matplotlib.pyplot as plt
-    import numpy as np
+def addlabels(x,y,colors):
+    for i in range(len(x)):
+        plt.text(i,y[i]+0.01,y[i],color = colors[i])
 
-    colors = cm.turbo(np.arange(len(y))/(len(y)))
-
+def plot_bar(x,y):
+    colors = cm.turbo(np.arange(len(y)+1)/(len(y)+1))
     # plot
-    fig, ax = plt.subplots()
-
-    ax.bar(labels, y, labels = labels, width=1, edgecolor="white", colors = colors,linewidth=0.7)
-
-    ax.set(xlim=(0, 8), xticks=np.arange(1, 8),
-        ylim=(0, 8), yticks=np.arange(1, 8))
-
+    plt.bar(x, y, color = colors, edgecolor='black')
+    # calling the function to add value labels
+    addlabels(x, y, colors)
+    # giving title to the plot
+    plt.title("Top 10 Artists")
+    # giving X and Y labels
+    plt.xlabel("Artists")
+    plt.ylabel("Song Appearances")
+    plt.xticks(range(len(x)), x, rotation=90)
     plt.show()
 
 def artistsgenres_dummies(df):
@@ -52,7 +53,6 @@ def artistsgenres_dummies(df):
 
     num_artists = df_artists.shape[1] - df.shape[1]
     artists_cols = df_artists.iloc[:,-num_artists:]
-    artists_cols.value_counts()
 
     artists_count = artists_cols.isin([1]).sum(axis=0)
 
@@ -62,24 +62,30 @@ def artistsgenres_dummies(df):
 
     ac = np.hstack((ac,l))
     ac = ac[ac[:, 0].argsort()]
-
-    # other_count = np.sum(ac[:-10, :1])
-    # other = np.array([other_count,'Other']).reshape((1, -1))
-
-    # a = np.vstack((ac[-10:,:],other))
-    a = ac[:,:10]
+    a = ac[-10:,:]
 
     x = a[:, :1]
     x = np.ndarray.tolist(x.reshape(1,-1)[0])
     y = a[:, 1:]
     y = np.ndarray.tolist(y.reshape(1,-1)[0])
-    import re
     y = [re.sub('\$', 'S', item) for item in y]
 
-    print("There are {0} unique artists in the playlist.".format(num_artists))
-    plot_bar(x,y)
+    print("There are {0} unique genres in the playlist.".format(num_artists))
+    plot_bar(y,x)
 
-    ############ Genres Dummies ############
+    other_count = np.sum(ac[:-10, :1])
+    other = np.array([other_count,'Other']).reshape((1, -1))
+    a = np.vstack((ac[-10:,:],other))
+
+    x = a[:, :1]
+    x = np.ndarray.tolist(x.reshape(1,-1)[0])
+    y = a[:, 1:]
+    y = np.ndarray.tolist(y.reshape(1,-1)[0])
+    y = [re.sub('\$', 'S', item) for item in y]
+
+    plot_pie(x,y)
+
+    # ############ Genres Dummies ############
 
     df_artistsgenres = df_artists.copy()
 
@@ -88,30 +94,38 @@ def artistsgenres_dummies(df):
             df_artistsgenres.at[index, genre] = 1
     df_artistsgenres = df_artistsgenres.fillna(0)
     df_artistsgenres = df_artistsgenres.drop(['genres'], 1)
-    df_artistsgenres.to_csv('Playlist_artists.csv', encoding='utf-8', index = False)
+    df_artistsgenres.to_csv('Playlist_artistsgenres.csv', encoding='utf-8', index = False)
 
     num_genres = df_artistsgenres.shape[1] - df_artists.shape[1]
     genres_cols = df_artistsgenres.iloc[:,-num_genres:]
+
     genres_count = genres_cols.isin([1]).sum(axis=0)
 
     gc = list(genres_count)
     gc = np.array(gc).reshape((-1, 1))
     l = np.array(genres_cols.columns).reshape((genres_cols.columns.size, 1))
+
     gc = np.hstack((gc,l))
     gc = gc[gc[:, 0].argsort()]
-
-    # other_count = np.sum(gc[:-10, :1])
-    # other = np.array([other_count,'Other']).reshape((1, -1))
-    # a = np.vstack((gc[-10:,:],other))
-    a = gc
-
+    a = gc[-10:,:]
     x = a[:, :1]
     x = np.ndarray.tolist(x.reshape(1,-1)[0])
     y = a[:, 1:]
     y = np.ndarray.tolist(y.reshape(1,-1)[0])
 
     print("There are {0} unique genres in the playlist.".format(num_genres))
-    plot_bar(x,y)
+
+    plot_bar(y,x)
+
+    other_count = np.sum(gc[:-10, :1])
+    other = np.array([other_count,'Other']).reshape((1, -1))
+    a = np.vstack((gc[-10:,:],other))
+    x = a[:, :1]
+    x = np.ndarray.tolist(x.reshape(1,-1)[0])
+    y = a[:, 1:]
+    y = np.ndarray.tolist(y.reshape(1,-1)[0])
+
+    plot_pie(x,y)
 
     # df_no_artists = df_artistsgenres.iloc[:,:df.shape[1]]
     # df_trackparams = df_artistsgenres.iloc[:,-num_genres:]

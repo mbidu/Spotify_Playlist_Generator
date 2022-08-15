@@ -29,9 +29,6 @@ def create_lib(sp, tracks):
         # Track ID
         lib["track{0}". format(l)]["id"] = l
 
-        # Track Rating
-        lib["track{0}". format(l)]["rating"] = ""
-
         # Track Name and URI
         track_uri = track["track"]["uri"]
         track_name = track["track"]["name"]
@@ -84,7 +81,7 @@ def create_lib(sp, tracks):
 
         # Track Release Date + Local
         # Local Tracks
-        if track['is_local'] == False:
+        if track['is_local'] == True:
             lib["track{0}". format(l)]["date"] = ''
             lib["track{0}". format(l)]["local"] = 'Yes'
         # Spotify Tracks
@@ -100,10 +97,12 @@ def create_lib(sp, tracks):
             lib["track{0}". format(l)]["local"] = 'No'
 
         # Track Genre
+        print(track_name)
         genres = []
-        for i in range (len(track["track"]["artists"])):
-            artist_genres = sp.artist(track["track"]["artists"][i]["id"])["genres"]
-            genres = genres + artist_genres
+        if track['is_local'] == False:
+            for i in range (len(track["track"]["artists"])):
+                artist_genres = sp.artist(track["track"]["artists"][i]["id"])["genres"]
+                genres = genres + artist_genres
         lib["track{0}". format(l)]["genres"] = genres
 
         # Track Duration
