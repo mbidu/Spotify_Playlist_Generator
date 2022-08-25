@@ -1,6 +1,7 @@
 def get_credentials():
     # Reading the Client ID and Client Secret from the .txt file to
     # access my Spotify Developer App.
+    print("in txt")
     with open(r"spotify_app_credentials.txt") as f:
         sac_lines = f.readlines()
         cid = sac_lines[0].split(", ")

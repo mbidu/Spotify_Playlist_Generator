@@ -1,25 +1,15 @@
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
+import pandas as pd
 
-def extract_playlist(playlist_link):
-    # Reading the Client ID and Client Secret from the .txt file to
-    # access my Spotify Developer App.
-    with open(r"C:\Users\mackt\Python\Music Library\spotify_app_credentials.txt") as f:
-        sac_lines = f.readlines()
-        cid = sac_lines[0].split(", ")
-        cid = cid[1].split("\n")
-        cid = cid[0]
-        secret = sac_lines[1].split(", ")
-        secret = secret[1]
-
+from create_lib import create_lib
+def extract_playlist(playlist_link,cid,secret):
     # Passing the credentials through the Spotify API
     # # Authentication - without user
     client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secret=secret)
     sp = spotipy.Spotify(client_credentials_manager = client_credentials_manager)
-
     # Adding the Playlist link and URI.
     playlist_URI = playlist_link.split("/")[-1].split("?")[0]
-
     # Spotify API only allows you to take 100 songs at a time.
     # This allows you to continue to take 100 songs as many times
     # as you can from the given playlist.
@@ -29,4 +19,10 @@ def extract_playlist(playlist_link):
         results = sp.next(results)
         tracks.extend(results['items'])
 
-    return sp,tracks
+    # Create dictionary of songs and uplicate index for identifying duplicate and unique songs.
+    lib = create_lib(sp, tracks)
+    lib = dict(sorted(lib.items(), key=lambda item: item[1]['popularity'], reverse = True))
+    df = pd.DataFrame.from_dict(lib, orient='index')
+    df = df.drop_duplicates(['song_fil','artists_fil'])
+
+    return df
