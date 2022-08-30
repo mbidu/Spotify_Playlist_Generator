@@ -28,9 +28,8 @@ def plot_bar(x,y):
     # calling the function to add value labels
     addlabels(x, y, colors)
     # giving title to the plot
-    plt.title("Top 10 Artists")
+    plt.title("Top 10")
     # giving X and Y labels
-    plt.xlabel("Artists")
     plt.ylabel("Song Appearances")
     plt.xticks(range(len(x)), x, rotation=90)
     plt.show()
@@ -70,7 +69,7 @@ def artistsgenres_dummies(df):
     y = np.ndarray.tolist(y.reshape(1,-1)[0])
     y = [re.sub('\$', 'S', item) for item in y]
 
-    print("There are {0} unique genres in the playlist.".format(num_artists))
+    print("There are {0} unique artists in the playlist.".format(num_artists))
     plot_bar(y,x)
 
     other_count = np.sum(ac[:-10, :1])

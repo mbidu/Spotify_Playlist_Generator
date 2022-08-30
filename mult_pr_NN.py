@@ -8,7 +8,6 @@ from keras.models import Sequential
 from keras.layers import Dense
 
 import random
-rnd = np.random.RandomState(1)
 
 import matplotlib.pyplot as plt
 from matplotlib import cm
@@ -16,7 +15,9 @@ from matplotlib import cm
 import multiprocessing
 import sys
 
-def get_randoms(unl,num_pos):
+def get_randoms(unl,num_pos,l):
+
+    rnd = np.random.RandomState(l)
 
     unl_indicies = unl.index.tolist()
 
@@ -44,7 +45,7 @@ def classification_model(X):
 def train(unl,pos,X,l):
     print("Training %i/8"%l,flush=True)
     sys.stdout.flush()
-    unl_rand, unl_rand_indicies, unl_others, unl_others_indicies = get_randoms(unl,pos.shape[0])
+    unl_rand, unl_rand_indicies, unl_others, unl_others_indicies = get_randoms(unl,pos.shape[0],l)
 
     dsample = pd.concat((unl_rand,pos), axis = 0)
 
@@ -58,10 +59,6 @@ def train(unl,pos,X,l):
     y_others = unl_others.iloc[:,0]
 
     pred = model.predict(X_others,batch_size=1)
-    # print(pred.size)
-    # for i in range(10):
-    #     # print(np.round(pred[i],2))
-    #     print(pred[i][0],y_tr.iloc[i])
 
     d_counts = np.zeros(unl.shape[0], dtype=np.int64)
     d_sums = np.zeros(unl.shape[0], dtype=np.float32)
@@ -71,25 +68,10 @@ def train(unl,pos,X,l):
         d_counts[ind[i]] += 1
         d_sums[ind[i]] += pred[i]
 
-    # p = (d_sums/d_counts).round(2)
-
-    # lo = 0.20; hi = 0.90
-
-    # p = p.reshape(-1,1)
-
-    # colors = 'brg'
-    # x = list(range(p.shape[0]))
-
-    # plt.scatter(x,p, c=p, cmap =colors)
-    # plt.axhline(y=hi, color = 'lime')
-    # plt.axhline(y=lo, color = 'blue')
-    # plt.show()
-
     return d_sums, d_counts
 
 def mult_pr_NN(unl,pos,X):
     l = list(range(8))
-    print(l)
     d_counts = np.zeros(unl.shape[0], dtype=np.int64)
     d_sums = np.zeros(unl.shape[0], dtype=np.float32)
 
@@ -101,14 +83,16 @@ def mult_pr_NN(unl,pos,X):
     pool.close()
     pool.join()
 
+    # print(d_counts_i[0])
+    # print(d_counts_i[1])
+
     for i in range(len(l)):
         d_counts += d_counts_i[i]
         d_sums += d_sums_i[i]
 
-    for i in range(8):
-        print(d_sums_i[i][0],"\t",d_counts_i[i][0])
-    print(d_sums[0],"\t",d_counts[0])
-    print()
+    # for i in range(8):
+    #     print(d_sums_i[i][0],"\t",d_counts_i[i][0])
+    # print(d_sums[0],"\t",d_counts[0])
 
     colors = 'brg'
 
@@ -116,11 +100,11 @@ def mult_pr_NN(unl,pos,X):
     p = p.reshape(-1,1)
     x = list(range(p.shape[0]))
 
-    print(p[0])
-    print(d_sums[0]/d_counts[0])
+    # print(p[0])
+    # print(d_sums[0]/d_counts[0])
 
-    print(d_counts)
-    print(d_sums)
+    # print(d_counts)
+    # print(d_sums)
 
     lo = 0.20; hi = 0.90
 

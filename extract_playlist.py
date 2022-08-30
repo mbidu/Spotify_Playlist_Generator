@@ -20,7 +20,7 @@ def extract_playlist(playlist_link,cid,secret):
         tracks.extend(results['items'])
 
     # Create dictionary of songs and uplicate index for identifying duplicate and unique songs.
-    lib = create_lib(sp, tracks)
+    lib = create_lib(tracks)
     lib = dict(sorted(lib.items(), key=lambda item: item[1]['popularity'], reverse = True))
     df = pd.DataFrame.from_dict(lib, orient='index')
     df = df.drop_duplicates(['song_fil','artists_fil'])

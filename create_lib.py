@@ -4,6 +4,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 
 # Time Modules
 from datetime import datetime
+import time
 
 # Printing in Multiprocessing
 import sys
@@ -14,16 +15,13 @@ import multiprocessing
 from filter_to_match import filter_to_match
 from get_credentials import get_credentials
 
-
-
 def lib_dics(x):
 
     track = x[0]
     l = x[1]
 
-    sys.stdout.flush()
-    print(l, flush = True)
-    sys.stdout.flush()
+    # sys.stdout.write(str(l))
+    # time.sleep(1)
 
     cid,secret = get_credentials()
     client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secret=secret)
@@ -133,13 +131,13 @@ def lib_dics(x):
 
     return lib
 
-def create_lib(sp,tracks):
+def create_lib(tracks):
 
     l = list(range(len(tracks)))
 
     cpu_count = multiprocessing.cpu_count()
-
     pool = multiprocessing.Pool(cpu_count)
+
     lib = {}
     ldic = pool.map(lib_dics, zip(tracks,l))
 
