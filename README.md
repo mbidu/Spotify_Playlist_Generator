@@ -6,16 +6,16 @@ Takes an outdated playlist on spotify and provides a playlist of recommended son
 
 https://open.spotify.com/playlist/1UKTBRHgkdX912lBOmyEDc?si=88ade23ad7c74aef
 
-![image](https://user-images.githubusercontent.com/84108349/187553876-463ee8ab-dbb9-43e4-84bf-6a17b6a6c4da.png)
+![image](https://user-images.githubusercontent.com/84108349/187554303-b6bee65e-f66d-4a42-b157-adc174ecd996.png)
 
 ### Songs to be Considered Playlist
 
 https://open.spotify.com/playlist/5Laxy7mYRekGm0a3Hm7VdI?si=4051e91fef2c4afe
 
-![image](https://user-images.githubusercontent.com/84108349/187553811-7c4e224c-4a69-4d53-bcf3-f8da58e60995.png)
+![image](https://user-images.githubusercontent.com/84108349/187554350-7767ac00-d637-44d7-a6d8-80acf6021050.png)
 
 ### Recommended Songs
 
 https://open.spotify.com/playlist/79NEaJDd13eMunCWMFyABP?si=6fb110d78d2b4461
 
-![image](https://user-images.githubusercontent.com/84108349/187553780-b011664f-2e1e-466e-b354-07cb23a32572.png)
+![image](https://user-images.githubusercontent.com/84108349/187554381-fee40e75-d7f7-4e42-922d-a923fc52a599.png)
