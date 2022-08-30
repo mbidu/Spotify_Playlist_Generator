@@ -1,4 +1,4 @@
-# Spotify_Playlist_Generator
+# Spotify_Playlist_Generator using PUL
 
 Takes an outdated playlist on spotify and provides a playlist of recommended songs to update your outdate playlist.
 
