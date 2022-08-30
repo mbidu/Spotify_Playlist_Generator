@@ -18,4 +18,4 @@ https://open.spotify.com/playlist/5Laxy7mYRekGm0a3Hm7VdI?si=4051e91fef2c4afe
 
 https://open.spotify.com/playlist/79NEaJDd13eMunCWMFyABP?si=6fb110d78d2b4461
 
-![image](https://user-images.githubusercontent.com/84108349/187554381-fee40e75-d7f7-4e42-922d-a923fc52a599.png)
+![image](https://user-images.githubusercontent.com/84108349/187554809-db9868d1-d308-42ba-b5d1-ea04e3355bbc.png)
